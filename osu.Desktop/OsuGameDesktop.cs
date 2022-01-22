@@ -96,7 +96,13 @@ namespace osu.Desktop
             string packageManaged = Environment.GetEnvironmentVariable("OSU_EXTERNAL_UPDATE_PROVIDER");
 
             if (!string.IsNullOrEmpty(packageManaged))
-                return new NoActionUpdateManager();
+                if (packageManaged == "flatpak")
+                    {
+                        Logger.Log("Using flatpak updater", LoggingTarget.Runtime, LogLevel.Important);
+                        return new FlatpakUpdateManager();
+                    }
+                else
+                    return new NoActionUpdateManager();
 
             switch (RuntimeInfo.OS)
             {
